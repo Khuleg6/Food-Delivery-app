@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { Navigation } from "./component/navigation";
 import { Footer } from "./component/footer";
+import { Card } from "./component/ card";
 
 export default function Home() {
   return (
@@ -11,9 +12,9 @@ export default function Home() {
       </div>
       <div className="h-[960px]">
         <p>Appetizers</p>
+        <Card />
       </div>
       <div>
-        {" "}
         <Footer />
       </div>
     </div>

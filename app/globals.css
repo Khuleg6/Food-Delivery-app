@@ -23,3 +23,7 @@ body {
   color: var(--foreground);
   font-family: var(--font-sans);
 }
+.container {
+  margin: 0 auto;
+  max-width: 1440px;
+}
