@@ -2,6 +2,7 @@ import Link from "next/link";
 import { TextField } from "../component/textfield";
 import { useState } from "react";
 import { error } from "node:console";
+import { on } from "node:events";
 
 interface SecondstepProps {
   handleNextStep: () => void;
@@ -22,7 +23,7 @@ export const Firststep = ({
     // Жишээ нь: Хэрэв хоосон байвал эсвэл "za" гэж бичвэл алдаа заана
     if (value.trim() === "") {
       setEmailError("Email is required");
-    } else if (value === "za") {
+    } else if (!/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/.test(email)) {
       setEmailError("This email is not allowed");
     } else {
       setEmailError(""); // Алдаагүй бол хоосон болгоно
@@ -86,7 +87,7 @@ export const Firststep = ({
         </div>
         <div>
           <button
-            onClick={handleNextStep}
+            onClick={onSubmit}
             className="w-full bg-[#D1D1D1] text-white py-2 rounded-md"
           >
             Let's Go

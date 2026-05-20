@@ -13,9 +13,12 @@ export const Navigation = () => {
           >
             Sign up
           </Link>
-          <button className="bg-[#EF4444] py-1 px-1.5  rounded-full">
+          <Link
+            href={"/signin"}
+            className="bg-[#EF4444] py-1 px-1.5  rounded-full"
+          >
             Log in
-          </button>
+          </Link>
         </div>
       </div>
     </div>
