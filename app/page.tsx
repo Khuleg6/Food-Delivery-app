@@ -5,14 +5,38 @@ import { Card } from "./component/ card";
 
 export default function Home() {
   return (
-    <div>
+    <div className="bg-[#404040]">
       <div>
         <Navigation />
-        <img className="w-full h-[800px]" src="/img.png" alt="Logo" />
+        <img className="w-full h-[724px]" src="/hero1.png" alt="Logo" />
       </div>
-      <div className="h-[960px]">
-        <p>Appetizers</p>
-        <Card />
+
+      <div className="px-20 py-10">
+        <p className="text-white text-3xl font-semibold">Appetizers</p>
+        <div className="grid py-10 grid-cols-5 grid-rows-2 gap-6">
+          {" "}
+          {Array.from({ length: 10 }).map((_, index) => (
+            <Card key={index} />
+          ))}
+        </div>
+      </div>
+      <div className="px-20 py-10">
+        <p className="text-white text-3xl font-semibold">Appetizers</p>
+        <div className="grid py-10 grid-cols-5 grid-rows-2 gap-6">
+          {" "}
+          {Array.from({ length: 10 }).map((_, index) => (
+            <Card key={index} />
+          ))}
+        </div>
+      </div>
+      <div className="px-20 py-10">
+        <p className="text-white text-3xl font-semibold">Appetizers</p>
+        <div className="grid py-10 grid-cols-5 grid-rows-2 gap-6">
+          {" "}
+          {Array.from({ length: 10 }).map((_, index) => (
+            <Card key={index} />
+          ))}
+        </div>
       </div>
       <div>
         <Footer />

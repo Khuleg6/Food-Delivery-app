@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { NaviLogo } from "./naviLogo";
 
 export const Navigation = () => {
@@ -6,9 +7,12 @@ export const Navigation = () => {
       <div className="flex justify-between container mx-auto items-center">
         <NaviLogo />
         <div className="text-[14px] font-medium flex gap-[12.81px]">
-          <button className="bg-[#F4F4F5] py-1 px-2  rounded-full">
+          <Link
+            href={"/signup"}
+            className="bg-[#F4F4F5] py-1 px-2  rounded-full"
+          >
             Sign up
-          </button>
+          </Link>
           <button className="bg-[#EF4444] py-1 px-1.5  rounded-full">
             Log in
           </button>
