@@ -23,7 +23,7 @@ export const Firststep = ({
     // Жишээ нь: Хэрэв хоосон байвал эсвэл "za" гэж бичвэл алдаа заана
     if (value.trim() === "") {
       setEmailError("Email is required");
-    } else if (!/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/.test(email)) {
+    } else if (!/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/.test(value)) {
       setEmailError("This email is not allowed");
     } else {
       setEmailError(""); // Алдаагүй бол хоосон болгоно

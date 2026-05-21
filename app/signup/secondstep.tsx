@@ -14,24 +14,39 @@ export const Secondstep = ({
 }: SecondstepProps) => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [passwordError, setPasswordError] = useState("");
+  const [passwordError, setPasswordError] = useState<string[]>([]);
+  const [showPassword, setShowPassword] = useState(false);
 
   const isPasswordValid = (value: string) => {
     setPassword(value);
-    if (value.trim() === "") {
-      setPasswordError("Password is required");
-    } else if (
-      !/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(
-        password,
-      )
-    ) {
-      setPasswordError(
-        "Password must be at least 8 characters long and include uppercase letters, lowercase letters, numbers, and special characters.",
-      );
+
+    const errors = [];
+
+    if (!/(?=.*[A-Za-z])/.test(value)) {
+      errors.push("дор хаяж 1 үсэг");
+    }
+
+    if (!/(?=.*\d)/.test(value)) {
+      errors.push("дор хаяж 1 тоо");
+    }
+
+    if (value.length < 8) {
+      errors.push("хамгийн багадаа 8 тэмдэгт");
+    }
+
+    setPasswordError(errors);
+  };
+
+  const isConfirmPasswordValid = (value: string) => {
+    setConfirmPassword(value);
+
+    if (value !== password) {
+      setConfirmPassword("Нууц үг таарахгүй байна");
     } else {
-      setPasswordError("");
+      setConfirmPassword("");
     }
   };
+
   return (
     <div className="flex gap-15 container">
       <div className="space-y-6 flex justify-center flex-col">
@@ -70,14 +85,30 @@ export const Secondstep = ({
         <div className="flex gap-3 flex-col">
           <TextField
             placeholder="Password"
-            type="password"
+            error=""
+            type={showPassword ? "text" : "password"}
             onChange={(e) => {
               isPasswordValid(e.target.value);
             }}
           />
-          <TextField placeholder="Confirm password" type="password" />
+          <div className="text-sm text-red-500 mt-2">
+            {passwordError.map((error, index) => (
+              <p key={index}>• {error}</p>
+            ))}
+          </div>
+          <TextField
+            id=""
+            placeholder="Confirm password"
+            error={confirmPassword}
+            type={showPassword ? "text" : "password"}
+            onChange={(e) => {
+              isConfirmPasswordValid(e.target.value);
+            }}
+          />
           <div className="flex gap-2 items-center">
             <input
+              checked={showPassword}
+              onChange={() => setShowPassword(!showPassword)}
               className="h-[16px] w-[16px] border border-[#71717A]"
               type="checkbox"
             />
