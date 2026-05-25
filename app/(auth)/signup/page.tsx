@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import { TextField } from "../component/textfield";
+import { TextField } from "../../component/textfield";
 import { Secondstep } from "./secondstep";
 import { Firststep } from "./firststep";
 

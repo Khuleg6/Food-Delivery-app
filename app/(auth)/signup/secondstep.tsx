@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { TextField } from "../component/textfield";
+import { TextField } from "../../component/textfield";
 
 // 1. Эхлээд компонентынхоо хүлээж авах Props-ын төрлийг тодорхойлно
 interface SecondstepProps {

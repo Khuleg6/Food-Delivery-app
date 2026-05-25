@@ -1,0 +1,20 @@
+import { Navigation } from "../component/navigation";
+import { Footer } from "../component/footer";
+import { Card } from "../component/ card";
+
+export default function Home() {
+  return (
+    <div className="bg-gray-200 ">
+      <img className="w-full h-[724px]" src="/hero1.png" alt="Logo" />
+      <div className="px-20 py-10 container">
+        <p className="text-black text-3xl font-semibold">Appetizers</p>
+        <div className="grid py-10 grid-cols-4 grid-rows-2 gap-6">
+          {" "}
+          {Array.from({ length: 8 }).map((_, index) => (
+            <Card key={index} />
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}

@@ -1,6 +1,6 @@
 import Link from "next/link";
 import React from "react";
-import { TextField } from "../component/textfield";
+import { TextField } from "../../component/textfield";
 
 export default function Home() {
   return (

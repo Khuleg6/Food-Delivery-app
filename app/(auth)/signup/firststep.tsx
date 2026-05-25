@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { TextField } from "../component/textfield";
+import { TextField } from "../../component/textfield";
 import { useState } from "react";
 import { error } from "node:console";
 import { on } from "node:events";
