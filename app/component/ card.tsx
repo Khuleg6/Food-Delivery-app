@@ -1,6 +1,6 @@
 export const Card = () => {
   return (
-    <div className="w-[280px] h-[395px] shadow-lg  hover:shadow-gray-500  bg-gray-200 flex flex-col gap-2.5">
+    <div className="w-[280px] h-[395px] shadow-lg rounded-xl overflow-hidden hover:shadow-gray-500  bg-gray-200 flex flex-col gap-2.5">
       <div className="">
         <img src="/food.jpg" className="relative w-full h-[210px] " alt="" />
         <button className="absolute"></button>

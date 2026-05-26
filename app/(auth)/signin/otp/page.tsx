@@ -1,25 +1,32 @@
 "use client";
 import Link from "next/link";
 import React, { useState } from "react";
-import { SubmitButton, TextField } from "../../component/textfield";
+
 import axios from "axios";
-import { useRouter, useSearchParams } from "next/navigation";
+import { SubmitButton, TextField } from "@/app/component/textfield";
+import { useSearchParams } from "next/navigation";
 import { useUser } from "@/app/user-provider";
 
-export default function Home() {
-  const [email, setEmail] = useState("");
+export default function OTPPage() {
+  const { setAccessToken } = useUser();
+  const searchParams = useSearchParams();
+  const email = searchParams.get("email") || "";
+
+  const [otp, setOtp] = useState(0);
   const [loading, setLoading] = useState(false);
-  const router = useRouter();
 
   const handleSubmitForm = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
     setLoading(true);
     axios
-      .post("/api/auth", { email })
+      .post("/api/auth/otp", {
+        email,
+        otp,
+      })
       .then((res) => {
-        setLoading(false);
         alert(res.data.message);
-        router.push(`/signin/otp?email=${email}`);
+        setLoading(false);
+        setAccessToken(res.data.accessToken);
       })
       .catch(({ response }) => {
         alert(response.message);
@@ -66,9 +73,22 @@ export default function Home() {
             value={email}
             type="email"
             id=""
+            required
+            readOnly
+          />
+
+          <TextField
+            placeholder="OTP"
+            value={otp + ""}
+            type="number"
+            id="otp"
             onChange={(e) => {
-              setEmail(e.target.value);
+              const value = Number(e.target.value);
+              if (!isNaN(value)) {
+                if (value < 9999) setOtp(value);
+              }
             }}
+            required
           />
           <SubmitButton loading={loading}>{"Login"}</SubmitButton>
         </form>

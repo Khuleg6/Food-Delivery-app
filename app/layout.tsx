@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 
 import "./globals.css";
+import Layout from "./(client)/layout";
+import { UserProvider } from "./user-provider";
 
 const inter = Inter({
   variable: "--font-sans",
@@ -20,7 +22,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`${inter.variable}  h-full antialiased`}>
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full flex flex-col">
+        {children}
+        <UserProvider />
+      </body>
     </html>
   );
 }
