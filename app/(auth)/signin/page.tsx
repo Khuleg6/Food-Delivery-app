@@ -60,7 +60,7 @@ export default function Home() {
             Log in to enjoy your favorite dishes.
           </p>
         </div>
-        <form className="flex flex-col gap-3" onSubmit={handleSubmitForm}>
+        <form className="flex flex-col gap-4" onSubmit={handleSubmitForm}>
           <TextField
             placeholder="Enter your email address"
             value={email}
@@ -72,11 +72,6 @@ export default function Home() {
           />
           <SubmitButton loading={loading}>{"Login"}</SubmitButton>
         </form>
-
-        <div className="flex justify-center gap-1">
-          <p className="text-[#71717A] text-[16px]">Don't have an account?</p>
-          <p className="text-[#2563EB]">Sign up </p>
-        </div>
       </div>
       <div>
         <img src="/frame.png" className="w-full" alt="" />

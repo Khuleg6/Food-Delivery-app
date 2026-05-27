@@ -11,6 +11,7 @@ type UseUserStore = {
   setUser: (user: User | null) => void;
   setAccessToken: (accessToken: string) => void;
   setLoading: (loading: boolean) => void;
+  logout: () => void;
 };
 const useUserStore = create<UseUserStore>((set) => ({
   user: null,
@@ -19,19 +20,30 @@ const useUserStore = create<UseUserStore>((set) => ({
   setUser: (user: User | null) => set(() => ({ user })),
   setAccessToken: (accessToken: string) => set(() => ({ accessToken })),
   setLoading: (loading: boolean) => set(() => ({ loading })),
+  logout: () => {
+    localStorage.removeItem("accessToken");
+    set(() => ({
+      user: null,
+      accessToken: "",
+      loading: false,
+    }));
+  },
 }));
 
 export const useUser = () => {
-  const { user, accessToken, setAccessToken, loading } = useUserStore();
+  const { logout, user, accessToken, setAccessToken, loading } = useUserStore();
 
-  return { user, accessToken, loading, setAccessToken };
+  return { logout, user, accessToken, loading, setAccessToken };
 };
 export const UserProvider = () => {
   const { accessToken, setUser, setAccessToken, setLoading } = useUserStore();
   useEffect(() => {
     if (window) {
-      setAccessToken(localStorage.getItem("accessToken") || "");
-      setLoading(false);
+      if (localStorage.getItem("accessToken")) {
+        setAccessToken(localStorage.getItem("accessToken") || "");
+      } else {
+        setLoading(false);
+      }
     }
   }, []);
   useEffect(() => {
@@ -49,7 +61,7 @@ export const UserProvider = () => {
         })
         .catch(({ response }) => {
           localStorage.removeItem("accessToken");
-          alert(response.data.message);
+          alert(response?.data?.message || "Алдаа гарлаа");
           setUser(null);
           setAccessToken("");
           setLoading(false);

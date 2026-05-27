@@ -26,7 +26,7 @@ export const TextField = ({
   return (
     <div>
       <input
-        className="border border-gray-200 p-2 rounded-md w-[416px]"
+        className="border border-gray-200 p-2 rounded-md w-[300px]"
         type={type}
         placeholder={placeholder}
         value={value}
@@ -53,7 +53,7 @@ export function SubmitButton({
       <button
         type="button"
         disabled={true}
-        className="w-full bg-black text-white py-2 rounded-md hover:opacity-80 cursor-pointer"
+        className="w-[300px] bg-black text-white py-2 rounded-md hover:opacity-80 cursor-pointer"
       >
         Loading...
       </button>
@@ -63,7 +63,7 @@ export function SubmitButton({
     <button
       type="submit"
       disabled={disabled}
-      className="w-full bg-black text-white py-2 rounded-md hover:opacity-80 cursor-pointer"
+      className="w-[300px] bg-black text-white py-2 rounded-md hover:opacity-80 cursor-pointer"
     >
       {children}
     </button>

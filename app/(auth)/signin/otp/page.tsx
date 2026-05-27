@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 import React, { useState } from "react";
-
+import { OTPInput, REGEXP_ONLY_DIGITS, SlotProps } from "input-otp";
 import axios from "axios";
 import { SubmitButton, TextField } from "@/app/component/textfield";
 import { useSearchParams } from "next/navigation";
@@ -12,7 +12,7 @@ export default function OTPPage() {
   const searchParams = useSearchParams();
   const email = searchParams.get("email") || "";
 
-  const [otp, setOtp] = useState(0);
+  const [otp, setOtp] = useState("");
   const [loading, setLoading] = useState(false);
 
   const handleSubmitForm = async (e: { preventDefault: () => void }) => {
@@ -21,7 +21,7 @@ export default function OTPPage() {
     axios
       .post("/api/auth/otp", {
         email,
-        otp,
+        otp: Number(otp),
       })
       .then((res) => {
         alert(res.data.message);
@@ -61,13 +61,13 @@ export default function OTPPage() {
           </svg>
         </Link>
 
-        <div>
+        <div className="">
           <p className="text-2xl font-semibold">Log in</p>
           <p className="text-[16px] font-normal text-[#71717A]">
             Log in to enjoy your favorite dishes.
           </p>
         </div>
-        <form className="flex flex-col gap-3" onSubmit={handleSubmitForm}>
+        <form className="flex flex-col gap-6" onSubmit={handleSubmitForm}>
           <TextField
             placeholder="Enter your email address"
             value={email}
@@ -77,19 +77,35 @@ export default function OTPPage() {
             readOnly
           />
 
-          <TextField
-            placeholder="OTP"
-            value={otp + ""}
-            type="number"
-            id="otp"
-            onChange={(e) => {
-              const value = Number(e.target.value);
-              if (!isNaN(value)) {
-                if (value < 9999) setOtp(value);
-              }
-            }}
-            required
-          />
+          <div className="space-y-3 flex flex-col">
+            <label className="text-sm font-medium text-zinc-700">
+              Enter 4-Digit Code
+            </label>
+
+            <OTPInput
+              maxLength={4}
+              value={otp}
+              onChange={setOtp}
+              pattern={REGEXP_ONLY_DIGITS}
+              render={({ slots }) => (
+                <div className="flex w-full gap-3">
+                  {slots.map((slot: SlotProps, idx: number) => (
+                    <div
+                      key={idx}
+                      className={`w-10 h-13 text-xl font-bold border-2 rounded-xl flex items-center justify-center transition-all bg-white text-zinc-950
+                        ${slot.isActive ? "border-black ring-2 ring-zinc-100" : "border-zinc-200"}
+                      `}
+                    >
+                      {slot.char}
+                      {slot.hasFakeCaret && (
+                        <div className="w-0.5 h-6 bg-black animate-caret-blink" />
+                      )}
+                    </div>
+                  ))}
+                </div>
+              )}
+            />
+          </div>
           <SubmitButton loading={loading}>{"Login"}</SubmitButton>
         </form>
 
