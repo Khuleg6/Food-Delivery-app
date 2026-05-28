@@ -9,7 +9,6 @@ export const Card = ({ onClick }: CardProps) => {
     >
       <div className="">
         <img src="/food.jpg" className="relative w-full h-[210px] " alt="" />
-        <button className="absolute"></button>
       </div>
       <div className="flex flex-col items-center mt-5">
         <p className="text-[16px] font-normal text-gray-600 leading-7">

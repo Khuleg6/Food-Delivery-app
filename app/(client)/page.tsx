@@ -18,9 +18,9 @@ export default function Home() {
         </div>
         <div
           data-shown={isVisible}
-          className="top-70 opacity-0  right-180 fixed data-[shown=true]:visible data-[shown=true]:opacity-100"
+          className="opacity-0 pointer-events-none fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 data-[shown=true]:opacity-100 data-[shown=true]:pointer-events-auto transition-opacity duration-200"
         >
-          <FoodDetails />
+          <FoodDetails onClose={() => setisVisible(false)} />
         </div>
       </div>
     </div>
