@@ -1,10 +1,9 @@
 "use client";
 import Link from "next/link";
-import React, { useState } from "react";
+import { useState } from "react";
 import { SubmitButton, TextField } from "../../component/textfield";
 import axios from "axios";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useUser } from "@/app/user-provider";
 
 export default function Home() {
   const [email, setEmail] = useState("");
@@ -62,9 +61,11 @@ export default function Home() {
         </div>
         <form className="flex flex-col gap-4" onSubmit={handleSubmitForm}>
           <TextField
+            name="email"
             placeholder="Enter your email address"
             value={email}
             type="email"
+            autoComplete="email"
             id=""
             onChange={(e) => {
               setEmail(e.target.value);

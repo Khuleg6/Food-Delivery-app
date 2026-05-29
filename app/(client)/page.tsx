@@ -1,5 +1,6 @@
 "use client";
-import { Card } from "../component/ card";
+
+import { Cart } from "../component/ cart";
 import { FoodDetails } from "../component/details";
 import { useState } from "react";
 
@@ -13,7 +14,7 @@ export default function Home() {
         <div className="grid py-10 grid-cols-4 grid-rows-2 gap-6">
           {" "}
           {Array.from({ length: 8 }).map((_, index) => (
-            <Card onClick={() => setisVisible(!isVisible)} key={index} />
+            <Cart onClick={() => setisVisible(!isVisible)} key={index} />
           ))}
         </div>
         <div

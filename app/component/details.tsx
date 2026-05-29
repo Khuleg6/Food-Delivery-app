@@ -1,19 +1,19 @@
 export const FoodDetails = ({ onClose }: { onClose: () => void }) => {
   return (
-    <div className="w-[856px] h-[412px] gap-10 bg-white rounded-[20px] flex items-center justify-center">
+    <div className="w-[836px] h-[412px] gap-2 bg-white rounded-[20px] flex items-center space-x-6 justify-center">
       <img className="w-[50%] h-[90%] rounded-[15px]" src="/food.jpg" alt="" />
-      <div className="flex flex-col gap-40">
-        <div className="flex flex-col">
-          <span className="text-[18px] font-semibold leading-8   text-black">
+      <div className="flex flex-col gap-10">
+        <div className="flex gap-2 flex-col">
+          <span className="text-[30px] font-semibold leading-8   text-black">
             Steak and french fries
           </span>
-          <span className="text-[14px] font-normal leading-5 text-gray-700  px-3">
+          <span className="text-[16px] font-normal leading-5 text-gray-700 ">
             Juicy stakes, delicious french fries.
           </span>
         </div>
-        <div className="flex flex-col space-x-6 space-y-10 ">
+        <div className="flex flex-col mt-15 space-x-6 space-y-10 ">
           <div className="flex">
-            <div className="flex flex-col space-x-10">
+            <div className="flex flex-col space-x-30">
               <span className="">Total price</span>
               <span>$12.99</span>
             </div>
@@ -25,7 +25,7 @@ export const FoodDetails = ({ onClose }: { onClose: () => void }) => {
           </div>
           <button
             onClick={onClose}
-            className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-full bg-gray-100 hover:bg-gray-200 text-gray-600 hover:text-black transition-colors"
+            className="absolute top-6 right-4 w-8 h-8 flex items-center justify-center rounded-full bg-gray-100 hover:bg-gray-200 text-gray-600 hover:text-black transition-colors"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -43,7 +43,7 @@ export const FoodDetails = ({ onClose }: { onClose: () => void }) => {
             </svg>
           </button>
 
-          <button className="flex items-center justify-center  h-11 px-30 py-2 bg-black gap-2 rounded-full">
+          <button className="flex items-center justify-center  h-11 px-25 py-2 bg-black gap-2 rounded-full">
             <span className="text-[14px] font-medium  leading-5 text-white">
               Add to cart
             </span>

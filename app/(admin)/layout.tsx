@@ -1,9 +1,10 @@
 "use client";
-import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+
 import React from "react";
-import { AppSidebar } from "./sidebar";
+
 import { useUser } from "../user-provider";
 import { redirect } from "next/navigation";
+import { AppSidebar } from "./sidebar";
 
 export default function AdminLayout({
   children,
@@ -27,12 +28,9 @@ export default function AdminLayout({
     );
   }
   return (
-    <SidebarProvider>
+    <div className="min-h-screen bg-zinc-100">
       <AppSidebar />
-      <main>
-        <SidebarTrigger />
-        {children}
-      </main>
-    </SidebarProvider>
+      {children}
+    </div>
   );
 }

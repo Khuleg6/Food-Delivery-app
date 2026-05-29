@@ -11,6 +11,8 @@ type Props = {
   placeholder: string;
   readOnly?: boolean;
   required?: boolean;
+  autoComplete?: string;
+  name?: string;
 };
 
 export const TextField = ({
@@ -22,6 +24,8 @@ export const TextField = ({
   placeholder,
   readOnly,
   required,
+  autoComplete,
+  name,
 }: Props) => {
   return (
     <div>
@@ -30,10 +34,12 @@ export const TextField = ({
         type={type}
         placeholder={placeholder}
         value={value}
+        name={name}
         onChange={onChange}
         id={id}
         readOnly={readOnly}
         required={required}
+        autoComplete={autoComplete}
       />
       {error && <p className="text-red-500 text-sm mt-1">{error}</p>}
     </div>

@@ -58,7 +58,7 @@ export const Navigation = () => {
 
             <div
               data-shown={isVisible}
-              className="absolute right-73 opacity-0 top-15 flex flex-col justify-center items-center gap-3 bg-white h-30 rounded-xl w-60 data-[shown=true]:visible data-[shown=true]:opacity-100"
+              className="absolute right-73 opacity-0 top-15 flex flex-col justify-center z-3 items-center gap-3 bg-white h-30 rounded-xl w-60 data-[shown=true]:visible data-[shown=true]:opacity-100"
             >
               <span className="font-semibold text-black text-[20px] ">
                 {user.email}
