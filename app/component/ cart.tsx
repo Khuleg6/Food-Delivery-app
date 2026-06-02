@@ -1,11 +1,12 @@
 interface CardProps {
   onClick: () => void;
+  className?: string;
 }
-export const Cart = ({ onClick }: CardProps) => {
+export const Cart = ({ className = "bg-gray-200", onClick }: CardProps) => {
   return (
     <div
       onClick={onClick}
-      className="w-[280px] h-[395px] shadow-lg rounded-xl overflow-hidden hover:shadow-gray-500  bg-gray-200 flex flex-col bg-cover gap-2.5"
+      className="w-[280px] h-[395px] transition-all duration-300 shadow-md rounded-xl overflow-hidden hover:shadow-xl  flex flex-col bg-cover gap-2.5"
     >
       <div className="">
         <img src="/food.jpg" className="relative w-full h-[210px] " alt="" />

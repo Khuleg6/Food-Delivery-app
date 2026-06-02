@@ -4,7 +4,7 @@ import React from "react";
 
 import { useUser } from "../user-provider";
 import { redirect } from "next/navigation";
-import { AppSidebar } from "./sidebar";
+import { AdminSidebar } from "./sidebar";
 
 export default function AdminLayout({
   children,
@@ -29,8 +29,13 @@ export default function AdminLayout({
   }
   return (
     <div className="min-h-screen bg-zinc-100">
-      <AppSidebar />
-      {children}
+      <AdminSidebar />
+      <main className="pl-57.25 pr-6 py-6">
+        <div className="flex items-start justify-end pb-6">
+          <div className="size-9 overflow-hidden rounded-full bg-zinc-300" />
+        </div>
+        {children}
+      </main>
     </div>
   );
 }

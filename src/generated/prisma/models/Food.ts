@@ -306,7 +306,7 @@ export type FoodScalarWhereWithAggregatesInput = {
 export type FoodCreateInput = {
   id?: string
   foodName: string
-  price: number
+  price?: number
   image: string
   ingredients: string
   createdAt?: Date | string
@@ -318,7 +318,7 @@ export type FoodCreateInput = {
 export type FoodUncheckedCreateInput = {
   id?: string
   foodName: string
-  price: number
+  price?: number
   image: string
   ingredients: string
   categoryId: string
@@ -354,7 +354,7 @@ export type FoodUncheckedUpdateInput = {
 export type FoodCreateManyInput = {
   id?: string
   foodName: string
-  price: number
+  price?: number
   image: string
   ingredients: string
   categoryId: string
@@ -506,7 +506,7 @@ export type FoodUpdateOneRequiredWithoutOrderItemsNestedInput = {
 export type FoodCreateWithoutCategoryInput = {
   id?: string
   foodName: string
-  price: number
+  price?: number
   image: string
   ingredients: string
   createdAt?: Date | string
@@ -517,7 +517,7 @@ export type FoodCreateWithoutCategoryInput = {
 export type FoodUncheckedCreateWithoutCategoryInput = {
   id?: string
   foodName: string
-  price: number
+  price?: number
   image: string
   ingredients: string
   createdAt?: Date | string
@@ -568,7 +568,7 @@ export type FoodScalarWhereInput = {
 export type FoodCreateWithoutOrderItemsInput = {
   id?: string
   foodName: string
-  price: number
+  price?: number
   image: string
   ingredients: string
   createdAt?: Date | string
@@ -579,7 +579,7 @@ export type FoodCreateWithoutOrderItemsInput = {
 export type FoodUncheckedCreateWithoutOrderItemsInput = {
   id?: string
   foodName: string
-  price: number
+  price?: number
   image: string
   ingredients: string
   categoryId: string
@@ -628,7 +628,7 @@ export type FoodUncheckedUpdateWithoutOrderItemsInput = {
 export type FoodCreateManyCategoryInput = {
   id?: string
   foodName: string
-  price: number
+  price?: number
   image: string
   ingredients: string
   createdAt?: Date | string

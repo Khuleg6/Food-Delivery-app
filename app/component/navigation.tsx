@@ -19,7 +19,7 @@ export const Navigation = () => {
     }
   };
   return (
-    <div className="bg-[#18181B] relative py-3 ">
+    <div className="bg-[#18181B] relative w-full py-3 ">
       <div className="flex justify-between container mx-auto items-center">
         <NaviLogo />
         {!user ? (
@@ -58,7 +58,7 @@ export const Navigation = () => {
 
             <div
               data-shown={isVisible}
-              className="absolute right-73 opacity-0 top-15 flex flex-col justify-center z-3 items-center gap-3 bg-white h-30 rounded-xl w-60 data-[shown=true]:visible data-[shown=true]:opacity-100"
+              className="absolute  opacity-0  flex top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex-col justify-center z-3 items-center gap-3 bg-white h-30 rounded-xl w-60 data-[shown=true]:visible data-[shown=true]:opacity-100"
             >
               <span className="font-semibold text-black text-[20px] ">
                 {user.email}

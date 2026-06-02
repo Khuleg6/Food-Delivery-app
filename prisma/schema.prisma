@@ -51,7 +51,7 @@ model FoodCategory {
 model Food {
   id          String          @id @default(uuid())
   foodName    String
-  price       Float
+  price       Float           @default(0)
   image       String
   ingredients String
   categoryId  String
