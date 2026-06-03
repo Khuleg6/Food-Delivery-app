@@ -1,5 +1,5 @@
 import React from "react";
-import { ProductCard } from "./product-card";
+import { AddProduct } from "./add-product";
 import { Cart } from "@/app/component/ cart";
 import { FoodCategoryWithFoods } from "./page";
 
@@ -18,9 +18,21 @@ export const ProductSection = ({
           <span>({category.foods.length})</span>
         </h3>
         <div className="flex gap-5">
-          <ProductCard />
-          {category.foods.map((product, i) => (
-            <Cart key={`${category.id}-${i}`} className="bg-white" />
+          <AddProduct
+            category={category.categoryName}
+            onClick={() => {
+              onCreate(category.id);
+            }}
+          />
+          {category.foods.map((food, i) => (
+            <Cart
+              onClick={() => {
+                onclick;
+              }}
+              food={food}
+              key={`${category.id}-${i}`}
+              className="bg-white"
+            />
           ))}
         </div>
       </div>
