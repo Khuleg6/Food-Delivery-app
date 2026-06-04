@@ -1,11 +1,12 @@
 import { Food } from "@/src/generated/prisma/client";
+import { Pencil } from "lucide-react";
 
 interface CardProps {
   onClick: () => void;
   className?: string;
   food: Food;
 }
-export const Cart = ({
+export const ProductCard = ({
   className = "bg-gray-200",
   onClick,
   food,
@@ -13,7 +14,7 @@ export const Cart = ({
   return (
     <div
       onClick={onClick}
-      className="w-[280px] h-[395px] transition-all duration-300 shadow-md rounded-xl overflow-hidden hover:shadow-xl  flex flex-col bg-cover gap-2.5"
+      className="w-[280px] h-[340px] transition-all duration-300 shadow-md rounded-xl overflow-hidden hover:shadow-xl  flex flex-col bg-cover "
     >
       <div className="">
         <img
@@ -34,7 +35,6 @@ export const Cart = ({
             {food.ingredients}
           </p>
         </div>
-        <hr className="border mt-6 w-[110px]"></hr>
       </div>
     </div>
   );

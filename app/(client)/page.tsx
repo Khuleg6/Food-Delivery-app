@@ -1,10 +1,11 @@
 "use client";
 
 import { Food } from "@/src/generated/prisma/client";
-import { Cart } from "../component/ cart";
+
 import { FoodDetails } from "../component/details";
 import { useState } from "react";
 import { FoodCategoryWithFoods } from "../(admin)/admin/products/page";
+import { Card } from "../component/ card";
 
 export default function Home({
   food,
@@ -19,11 +20,7 @@ export default function Home({
       <img className="w-full h-[724px]" src="/hero1.png" alt="Logo" />
       <div className="px-20 py-10 container">
         <p className="text-black text-3xl font-semibold">Appetizers</p>
-        <div className="grid py-10 grid-cols-4 grid-rows-2 gap-6">
-          {food.map((food) => {
-            <Cart food={food} onClick={() => setisVisible(!isVisible)} />;
-          })}
-        </div>
+        <div className="grid py-10 grid-cols-4 grid-rows-2 gap-6"></div>
         <div
           data-shown={isVisible}
           className="opacity-0 pointer-events-none fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 data-[shown=true]:opacity-100 data-[shown=true]:pointer-events-auto transition-opacity duration-200"

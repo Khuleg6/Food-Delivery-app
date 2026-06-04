@@ -1,7 +1,8 @@
 import React from "react";
 import { AddProduct } from "./add-product";
-import { Cart } from "@/app/component/ cart";
+
 import { FoodCategoryWithFoods } from "./page";
+import { ProductCard } from "./product-card";
 
 export const ProductSection = ({
   category,
@@ -24,8 +25,9 @@ export const ProductSection = ({
               onCreate(category.id);
             }}
           />
+
           {category.foods.map((food, i) => (
-            <Cart
+            <ProductCard
               onClick={() => {
                 onclick;
               }}
