@@ -7,9 +7,11 @@ import { ProductCard } from "./product-card";
 export const ProductSection = ({
   category,
   onCreate,
+  onEdit,
 }: {
   category: FoodCategoryWithFoods;
   onCreate: (catId: string) => void;
+  onEdit: (food: any) => void;
 }) => {
   return (
     <section>
@@ -29,7 +31,7 @@ export const ProductSection = ({
           {category.foods.map((food, i) => (
             <ProductCard
               onClick={() => {
-                onclick;
+                onEdit(food);
               }}
               food={food}
               key={`${category.id}-${i}`}

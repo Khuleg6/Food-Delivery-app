@@ -5,6 +5,7 @@ import { Prisma } from "@/src/generated/prisma/client";
 import { ProductSection } from "./product-section";
 import axios from "axios";
 import { FoodCreateDialog } from "./food-create-dialog";
+import { FoodEditDialog } from "./edit-product-dialog";
 
 export type FoodCategoryWithFoods = Prisma.FoodCategoryGetPayload<{
   include: { foods: true };
@@ -12,12 +13,16 @@ export type FoodCategoryWithFoods = Prisma.FoodCategoryGetPayload<{
 
 export default function AdminProductsPage() {
   const [active, setActive] = useState("All");
-
+  const [editingFood, setEditingFood] = useState<null>(null);
   const [isCategoryCreating, setIsCategoryCreating] = useState(false);
   const [categories, setCategories] = useState<FoodCategoryWithFoods[]>([]);
   const [creatingCategory, setCreatingCategory] = useState("");
   const visible =
     active === "All" ? categories : categories.filter((s) => s.id === active);
+
+  const handleOnEditProducts = (food: any) => {
+    setEditingFood(food);
+  };
 
   const handleOnCreateCategory = (open?: boolean) => {
     setIsCategoryCreating(open || true);
@@ -45,6 +50,7 @@ export default function AdminProductsPage() {
             category={section}
             key={section.id}
             onCreate={handleOnCreateProduct}
+            onEdit={handleOnEditProducts}
           />
         ))}
       </div>
@@ -55,6 +61,12 @@ export default function AdminProductsPage() {
         }}
         categories={categories}
         foodCategoryId={creatingCategory}
+      />
+      <FoodEditDialog
+        open={Boolean(editingFood)}
+        onClose={() => setEditingFood(null)}
+        categories={categories}
+        food={editingFood}
       />
     </div>
   );
