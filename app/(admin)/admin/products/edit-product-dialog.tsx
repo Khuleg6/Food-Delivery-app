@@ -9,6 +9,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
+
 import { Field, FieldGroup } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -26,6 +27,8 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import { FoodCategoryWithFoods } from "./page";
 import { Food } from "@/src/generated/prisma/client";
+import { Trash, Trash2 } from "lucide-react";
+import { refresh } from "next/cache";
 
 // Засах гэж буй хоолны Type-ийг тодорхойлно
 interface FoodType {
@@ -65,6 +68,21 @@ export const FoodEditDialog = ({
       setCategoryId(food.categoryId);
     }
   }, [food, open]); // food эсвэл open өөрчлөгдөх бүрт ажиллана
+
+const handleDelete = (id:string)=>{
+  if(!confirm("Энэ хоолыг устгахдаа итгэлтэй байна уу?")) return;
+  setLoading(true);
+axios.delete("/api/foods", { data: { id } })
+  .then(()=>{
+    alert("successfully deleted")
+    onClose();
+    window.location.reload();
+  })
+  .catch(()=>
+    alert("Устгахад алдаа гарлаа."),
+)
+.finally(()=>setLoading(false));
+}
 
   const handleOnSubmit = () => {
     if (!food) return;
@@ -171,7 +189,10 @@ export const FoodEditDialog = ({
             )}
           </Field>
         </FieldGroup>
-        <DialogFooter>
+        <DialogFooter className="flex">
+          <Button onClick={()=>food && handleDelete(food.id)} variant="destructive" className="mr-auto">
+            <Trash/>
+          </Button>
           <DialogClose asChild>
             <Button variant="outline" disabled={loading}>
               Cancel

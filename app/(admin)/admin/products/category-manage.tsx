@@ -42,7 +42,7 @@ export const CategoryManageDialog = ({
         alert("Категори амжилттай нэмэгдлээ! 🎉");
         setNewCatName("");
         refreshData();
-        window.location.reload();
+        
       })
       .catch(() => alert("Нэмэхэд алдаа гарлаа"))
       .finally(() => setLoading(false));
@@ -63,7 +63,7 @@ export const CategoryManageDialog = ({
       .then(() => {
         setEditingId(null);
         refreshData();
-        window.location.reload();
+       
       })
       .catch(() => alert("Засахад алдаа гарлаа"))
       .finally(() => setLoading(false));
@@ -77,7 +77,7 @@ export const CategoryManageDialog = ({
       .delete("/api/foods/categories", { data: { id } })
       .then(() => {
         refreshData();
-        window.location.reload();
+        
       })
       .catch(() =>
         alert("Устгахад алдаа гарлаа. Хоол холбоотой байж магадгүй."),
