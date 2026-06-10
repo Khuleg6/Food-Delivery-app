@@ -3,14 +3,10 @@ import { Pencil } from "lucide-react";
 
 interface CardProps {
   onClick: () => void;
-  className?: string;
+
   food: Food;
 }
-export const ProductCard = ({
-  className = "bg-gray-200",
-  onClick,
-  food,
-}: CardProps) => {
+export const ProductCard = ({ onClick, food }: CardProps) => {
   return (
     <div
       onClick={onClick}

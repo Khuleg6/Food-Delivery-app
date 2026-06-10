@@ -4,10 +4,14 @@ import { NaviLogo } from "./naviLogo";
 import { useUser } from "../user-provider";
 import { ChevronRight, MapPin, ShoppingCart, User } from "lucide-react";
 import { useState } from "react";
+import { useCart } from "@/context/CartContext";
 
 export const Navigation = () => {
   const [isVisible, setisVisible] = useState(false);
   const { user, logout } = useUser();
+
+  const { cartItems, setIsOpen } = useCart();
+  const totalCount = cartItems.reduce((sum, item) => sum + item.quantity, 0);
 
   const handleSignOut = () => {
     const isConfirmed = window.confirm(
@@ -41,11 +45,16 @@ export const Navigation = () => {
               <span className="text-sm text-zinc-500">Add Location</span>
               <ChevronRight className="w-4 h-4 text-zinc-450" />
             </button>
-            <button className="relative flex items-center justify-center w-10 h-10 bg-white rounded-full hover:bg-zinc-100">
+            <button
+              onClick={() => setIsOpen(true)}
+              className="relative flex items-center justify-center w-10 h-10 bg-white rounded-full hover:bg-zinc-100"
+            >
               <ShoppingCart className="w-5 h-5 text-zinc-800" />
-              <span className="absolute -top-1 -right-1 flex items-center justify-center w-5 h-5 bg-[#E05345] text-white text-xs rounded-full">
-                1
-              </span>
+              {totalCount > 0 && (
+                <span className="bg-[#ff4b4b] text-white text-xs px-2 py-0.5 rounded-full">
+                  {totalCount}
+                </span>
+              )}
             </button>
             <button
               onClick={() => {

@@ -1,3 +1,9 @@
+import { Food } from "@/src/generated/prisma/client";
+
+interface FoodDetailsProps {
+  food: Food | null;
+  onClose: () => void;
+}
 export const FoodDetails = ({ onClose }: { onClose: () => void }) => {
   return (
     <div className="w-[836px] h-[412px] gap-2 bg-white rounded-[20px] flex items-center space-x-6 justify-center">
