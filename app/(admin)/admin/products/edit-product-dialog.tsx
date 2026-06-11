@@ -27,24 +27,13 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import { FoodCategoryWithFoods } from "./page";
 import { Food } from "@/src/generated/prisma/client";
-import { Trash, Trash2 } from "lucide-react";
-import { refresh } from "next/cache";
-
-// Засах гэж буй хоолны Type-ийг тодорхойлно
-interface FoodType {
-  id: string;
-  foodName: string;
-  price: number;
-  ingredients: string;
-  image: string;
-  categoryId: string;
-}
+import { Trash } from "lucide-react";
 
 export const FoodEditDialog = ({
   open,
   onClose,
   categories,
-  food, // Засах гэж буй хоолны объект орж ирнэ
+  food,
 }: {
   open: boolean;
   onClose: () => void;
@@ -55,10 +44,9 @@ export const FoodEditDialog = ({
   const [price, setPrice] = useState(0);
   const [ingredients, setIngredients] = useState("");
   const [image, setImage] = useState("");
-  const [categoryId, setCategoryId] = useState(""); // Категорийн id-г state болгов
+  const [categoryId, setCategoryId] = useState("");
   const [loading, setLoading] = useState(false);
 
-  // Dialog нээгдэх үед хуучин датаг оноож өгнө
   useEffect(() => {
     if (food) {
       setName(food.foodName);
@@ -67,46 +55,55 @@ export const FoodEditDialog = ({
       setImage(food.image);
       setCategoryId(food.categoryId);
     }
-  }, [food, open]); // food эсвэл open өөрчлөгдөх бүрт ажиллана
+  }, [food, open]);
 
-const handleDelete = (id:string)=>{
-  if(!confirm("Энэ хоолыг устгахдаа итгэлтэй байна уу?")) return;
-  setLoading(true);
-axios.delete("/api/foods", { data: { id } })
-  .then(()=>{
-    alert("successfully deleted")
-    onClose();
-    window.location.reload();
-  })
-  .catch(()=>
-    alert("Устгахад алдаа гарлаа."),
-)
-.finally(()=>setLoading(false));
-}
+  const handleDelete = (id: string) => {
+    if (!confirm("Энэ хоолыг устгахдаа итгэлтэй байна уу?")) return;
+    setLoading(true);
+    axios
+      .delete("/api/foods", { data: { id } })
+      .then(() => {
+        alert("Амжилттай устгагдлаа");
+        onClose();
+        window.location.reload();
+      })
+      .catch(() => alert("Устгахад алдаа гарлаа."))
+      .finally(() => setLoading(false));
+  };
 
   const handleOnSubmit = () => {
     if (!food) return;
 
+    // Шаардлагатай талбарууд бөглөгдсөн эсэхийг шалгах validation
+    if (!foodName.trim() || !categoryId) {
+      alert("Хоолны нэр болон категорийг заавал сонгоно уу.");
+      return;
+    }
+
     setLoading(true);
-    // PUT хүсэлтээр тухайн хоолны ID-г хаяг дээр эсвэл дата дотор явуулна
+
+    // 💡 ЧУХАЛ ЗАСВАР: Хэрэв чиний бэкэнд /api/foods дотор PUT хүсэлтийг авдаг бол
+    // ID-г нь body дотор ингээд дамжуулна. Бэкэнд нь [id]/route.ts бүтэцтэй бол
+    // хаягийг `/api/foods/${food.id}` хэвээр үлдээж болно.
     axios
-      .put(`/api/foods/${food.id}`, {
+      .put("/api/foods", {
+        id: food.id, // ID-г body дотор хамт шидлээ
         foodName,
         image,
-        price,
+        price: parseFloat(price.toString()) || 0, // 🌟 Тоо руу найдвартай хөрвүүлэв
         ingredients,
         categoryId,
       })
-      .then((res) => {
-        alert("Хоолны мэдээлэл шинэчлэгдлээ");
-        setLoading(false);
+      .then(() => {
+        alert("Хоолны мэдээлэл шинэчлэгдлээ 🎉");
         onClose();
         window.location.reload();
       })
-      .catch(({ response }) => {
-        alert("Алдаа гарлаа");
-        setLoading(false);
-      });
+      .catch((err) => {
+        console.error("PUT Error:", err);
+        alert(err.response?.data?.error || "Засахад алдаа гарлаа");
+      })
+      .finally(() => setLoading(false));
   };
 
   return (
@@ -128,9 +125,8 @@ axios.delete("/api/foods", { data: { id } })
           </Field>
           <Field>
             <Label htmlFor="category-1">Category</Label>
-            {/* onValueChange-ээр сонгосон категорийг хадгална */}
             <Select value={categoryId} onValueChange={setCategoryId}>
-              <SelectTrigger id="category-1" className="w-full max-w-48">
+              <SelectTrigger id="category-1" className="w-full">
                 <SelectValue placeholder="Select a category" />
               </SelectTrigger>
               <SelectContent>
@@ -152,7 +148,7 @@ axios.delete("/api/foods", { data: { id } })
               name="price"
               placeholder="12.99"
               type="number"
-              value={price}
+              value={price || ""} // 0 үед хоосон харагдуулах эсвэл хэвийн харуулна
               onChange={(e) => setPrice(Number(e.target.value))}
             />
           </Field>
@@ -170,6 +166,7 @@ axios.delete("/api/foods", { data: { id } })
             <Label htmlFor="image-1">Image</Label>
             <input
               type="file"
+              className="text-sm text-zinc-400 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-zinc-800 file:text-zinc-200 hover:file:bg-zinc-700"
               onChange={(e) => {
                 if (e.target.files && e.target.files.length > 0) {
                   const form = new FormData();
@@ -184,23 +181,30 @@ axios.delete("/api/foods", { data: { id } })
               <img
                 src={image}
                 alt={foodName}
-                className="max-w-full h-auto mt-2 rounded"
+                className="max-w-full h-32 object-cover mt-2 rounded-xl border border-zinc-800"
               />
             )}
           </Field>
         </FieldGroup>
-        <DialogFooter className="flex">
-          <Button onClick={()=>food && handleDelete(food.id)} variant="destructive" className="mr-auto">
-            <Trash/>
+        <DialogFooter className="flex items-center justify-between gap-2 pt-4">
+          <Button
+            onClick={() => food && handleDelete(food.id)}
+            variant="destructive"
+            disabled={loading}
+            size="icon"
+          >
+            <Trash className="w-4 h-4" />
           </Button>
-          <DialogClose asChild>
-            <Button variant="outline" disabled={loading}>
-              Cancel
+          <div className="flex gap-2 ml-auto">
+            <DialogClose asChild>
+              <Button variant="outline" disabled={loading}>
+                Cancel
+              </Button>
+            </DialogClose>
+            <Button disabled={loading} onClick={handleOnSubmit}>
+              {loading ? "Saving..." : "Save changes"}
             </Button>
-          </DialogClose>
-          <Button type="submit" disabled={loading} onClick={handleOnSubmit}>
-            Save changes
-          </Button>
+          </div>
         </DialogFooter>
       </DialogContent>
     </Dialog>

@@ -10,7 +10,7 @@ export const Card = ({ bg = "bg-white", onClick, food }: CardProps) => {
   return (
     <div
       onClick={onClick}
-      className={`w-[280px] h-[395px] ${bg} transition-all duration-300 shadow-md rounded-xl overflow-hidden hover:shadow-xl  flex flex-col bg-cover gap-2.5`}
+      className={`w-[280px] h-[395px] ${bg} transition-all duration-300  overflow-hidden hover:shadow-xl  flex flex-col bg-cover gap-2.5 border border-zinc-100 shadow-sm rounded-2xl`}
     >
       <div className="">
         <img
@@ -21,7 +21,7 @@ export const Card = ({ bg = "bg-white", onClick, food }: CardProps) => {
       </div>
       <div className="flex flex-col items-center mt-5">
         <p className="text-[16px] font-normal text-gray-600 leading-7">
-          ${food.price}
+          ₮{food.price}
         </p>
         <p className="text-[18px] font-semibold leading-8   text-black">
           {food.foodName}

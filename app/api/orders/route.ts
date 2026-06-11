@@ -1,16 +1,15 @@
 import { NextResponse } from "next/server";
-// Prisma client-ийн зөв замаа өөрийнхөөрөө шалгаарай
-import { PrismaClient } from "@/src/generated/prisma/client";
+import { Prisma, PrismaClient } from "@/src/generated/prisma/client";
+import { prisma } from "@/app/lib/prisma";
 
-const prisma = new PrismaClient({} as any);
-
-// Next.js-д POST хүсэлтийг ингэж хүлээж авдаг
+// ==========================================
+// 1. ХЭРЭГЛЭГЧ ЗАХИАЛГА ӨГӨХ (POST)
+// ==========================================
 export async function POST(request: Request) {
   try {
     const body = await request.json();
     const { userId, items, totalPrice } = body;
 
-    // Баталгаажуулалт (Validation)
     if (!userId || !items || items.length === 0) {
       return NextResponse.json(
         { error: "Захиалгын мэдээлэл дутуу байна." },
@@ -18,25 +17,24 @@ export async function POST(request: Request) {
       );
     }
 
-    // Database Transaction
     const newOrder = await prisma.$transaction(async (tx) => {
-      // 1. FoodOrder хүснэгтэд захиалга үүсгэх
+      // 1. FoodOrder үүсгэх
       const order = await tx.foodOrder.create({
         data: {
           userId: userId,
-          totalPrice: totalPrice,
+          totalPrice: parseFloat(totalPrice),
           status: "PENDING",
         },
       });
 
-      // 2. Бэлдсэн хоолнуудыг FoodOrderItem бүтцэд тааруулж массив бэлдэх
+      // 2. Чиний FoodOrderItem модельд тааруулж дата бэлдэх
       const orderItemsData = items.map((item: any) => ({
         orderId: order.id,
         foodId: item.id,
-        quantity: item.quantity,
+        quantity: parseInt(item.quantity) || 1,
       }));
 
-      // 3. Бэлдсэн хоолнуудаа FoodOrderItem хүснэгт рүү бөөнөөр нь оруулах
+      // 3. Бөөнөөр нь хадгалах (foodOrderItem)
       await tx.foodOrderItem.createMany({
         data: orderItemsData,
       });
@@ -45,17 +43,50 @@ export async function POST(request: Request) {
     });
 
     return NextResponse.json(
-      {
-        message: "Хоолны захиалга амжилттай баталгаажлаа.",
-        orderId: newOrder.id,
-      },
+      { message: "Амжилттай", orderId: newOrder.id },
       { status: 201 },
     );
-  } catch (error) {
-    console.error("Захиалга хадгалахад алдаа гарлаа:", error);
+  } catch (error: any) {
+    console.error("❌ БЭКЭНД АЛДАА:", error);
     return NextResponse.json(
-      { error: "Захиалгыг өгөгдлийн санд хадгалахад алдаа гарлаа." },
+      { error: "Захиалга хадгалж чадсангүй.", details: error.message },
       { status: 500 },
     );
+  }
+}
+
+// ==========================================
+// 2. АДМИН БҮХ ЗАХИАЛГЫГ ТАТАЖ ХАРАХ (GET)
+// ==========================================
+// app/api/orders/route.ts-ийн GET хэсэг
+export async function GET(request: Request) {
+  try {
+    // URL-аас userId байгаа эсэхийг уншина (Жишээ нь: /api/orders?userId=xyz)
+    const { searchParams } = new URL(request.url);
+    const userId = searchParams.get("userId");
+
+    // Хэрэв userId ирсэн байвал зөвхөн тэр хэрэглэгчийн захиалгыг,
+    // байхгүй бол админд зориулж БҮХ захиалгыг татна
+    const whereCondition = userId ? { userId: userId } : {};
+
+    const orders = await prisma.foodOrder.findMany({
+      where: whereCondition,
+      include: {
+        user: true,
+        foodOrderItems: {
+          include: {
+            food: true,
+          },
+        },
+      },
+      orderBy: {
+        createdAt: "desc", // Шинэ захиалга дээрээ харагдана
+      },
+    });
+
+    return NextResponse.json(orders);
+  } catch (error) {
+    console.error("Захиалга татахад алдаа гарлаа:", error);
+    return NextResponse.json({ error: "Татаж чадсангүй." }, { status: 500 });
   }
 }
