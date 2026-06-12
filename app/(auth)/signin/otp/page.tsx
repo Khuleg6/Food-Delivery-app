@@ -1,13 +1,13 @@
 "use client";
 import Link from "next/link";
-import React, { useState } from "react";
+import React, { useState, Suspense } from "react";
 import { OTPInput, REGEXP_ONLY_DIGITS, SlotProps } from "input-otp";
 import axios from "axios";
 import { SubmitButton, TextField } from "@/app/component/textfield";
 import { useSearchParams } from "next/navigation";
 import { useUser } from "@/app/user-provider";
 
-export default function OTPPage() {
+function OTPContent() {
   const { setAccessToken } = useUser();
   const searchParams = useSearchParams();
   const email = searchParams.get("email") || "";
@@ -19,10 +19,7 @@ export default function OTPPage() {
     e.preventDefault();
     setLoading(true);
     axios
-      .post("/api/auth/otp", {
-        email,
-        otp: Number(otp),
-      })
+      .post("/api/auth/otp", { email, otp: Number(otp) })
       .then((res) => {
         alert(res.data.message);
         setLoading(false);
@@ -32,6 +29,7 @@ export default function OTPPage() {
         alert(response.message);
       });
   };
+
   return (
     <div className="flex gap-15 container">
       <div className="space-y-6 flex justify-center flex-col">
@@ -75,6 +73,7 @@ export default function OTPPage() {
             id=""
             required
             readOnly
+            error="error"
           />
 
           <div className="space-y-3 flex flex-col">
@@ -118,5 +117,12 @@ export default function OTPPage() {
         <img src="/frame.png" className="w-full" alt="" />
       </div>
     </div>
+  );
+}
+export default function OTPPage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <OTPContent />
+    </Suspense>
   );
 }

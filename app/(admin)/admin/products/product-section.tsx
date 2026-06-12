@@ -35,7 +35,6 @@ export const ProductSection = ({
               }}
               food={food}
               key={`${category.id}-${i}`}
-              className="bg-white"
             />
           ))}
         </div>

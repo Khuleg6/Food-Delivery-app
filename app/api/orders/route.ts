@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server";
-import { Prisma, PrismaClient } from "@/src/generated/prisma/client";
-import { prisma } from "@/app/lib/prisma";
+import { prisma } from "@/app/lib/prisma"; // 🌟 Зөвхөн глобал prisma-гаа ашиглана, хуучин ашиглаагүй PrismaClient-ийг устгав
 
 // ==========================================
 // 1. ХЭРЭГЛЭГЧ ЗАХИАЛГА ӨГӨХ (POST)
@@ -8,7 +7,8 @@ import { prisma } from "@/app/lib/prisma";
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const { userId, items, totalPrice } = body;
+    // 🌟 ЗАСВАР: Урд талаас илгээсэн address-ийг задалж авна
+    const { userId, items, totalPrice, address } = body;
 
     if (!userId || !items || items.length === 0) {
       return NextResponse.json(
@@ -18,6 +18,14 @@ export async function POST(request: Request) {
     }
 
     const newOrder = await prisma.$transaction(async (tx) => {
+      // 🌟 ШИНЭ: Хэрэглэгч хаягаа оруулсан бол түүнийг нь датабааз дээр нь хадгалж шинэчилнэ
+      if (address && address.trim() !== "") {
+        await tx.user.update({
+          where: { id: userId },
+          data: { address: address },
+        });
+      }
+
       // 1. FoodOrder үүсгэх
       const order = await tx.foodOrder.create({
         data: {
@@ -27,7 +35,7 @@ export async function POST(request: Request) {
         },
       });
 
-      // 2. Чиний FoodOrderItem модельд тааруулж дата бэлдэх
+      // 2. FoodOrderItem модельд тааруулж дата бэлдэх
       const orderItemsData = items.map((item: any) => ({
         orderId: order.id,
         foodId: item.id,
@@ -56,12 +64,10 @@ export async function POST(request: Request) {
 }
 
 // ==========================================
-// 2. АДМИН БҮХ ЗАХИАЛГЫГ ТАТАЖ ХАРАХ (GET)
+// 2. АДМИН БҮХ ЗАХИАЛГЫГ ТАТАЖ ХАРАХ / ХЭРЭГЛЭГЧ ӨӨРИЙНХИЙГӨӨ ХАРАХ (GET)
 // ==========================================
-// app/api/orders/route.ts-ийн GET хэсэг
 export async function GET(request: Request) {
   try {
-    // URL-аас userId байгаа эсэхийг уншина (Жишээ нь: /api/orders?userId=xyz)
     const { searchParams } = new URL(request.url);
     const userId = searchParams.get("userId");
 
@@ -80,7 +86,7 @@ export async function GET(request: Request) {
         },
       },
       orderBy: {
-        createdAt: "desc", // Шинэ захиалга дээрээ харагдана
+        createdAt: "desc",
       },
     });
 

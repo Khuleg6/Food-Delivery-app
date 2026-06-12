@@ -67,6 +67,7 @@ export default function Home() {
             type="email"
             autoComplete="email"
             id=""
+            error=""
             onChange={(e) => {
               setEmail(e.target.value);
             }}
