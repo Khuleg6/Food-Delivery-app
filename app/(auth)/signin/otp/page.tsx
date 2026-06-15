@@ -6,6 +6,7 @@ import axios from "axios";
 import { SubmitButton, TextField } from "@/app/component/textfield";
 import { useSearchParams } from "next/navigation";
 import { useUser } from "@/app/user-provider";
+import { toast } from "sonner";
 
 function OTPContent() {
   const { setAccessToken } = useUser();
@@ -21,12 +22,14 @@ function OTPContent() {
     axios
       .post("/api/auth/otp", { email, otp: Number(otp) })
       .then((res) => {
-        alert(res.data.message);
+        toast.success(res.data.message || "Амжилттай нэвтэрлээ!");
         setLoading(false);
         setAccessToken(res.data.accessToken);
       })
-      .catch(({ response }) => {
-        alert(response.message);
+      .catch(({ err }) => {
+        const errorMessage =
+          err.response?.data?.message || "Алдаа гарлаа, дахин оролдоно уу!";
+        toast.error(errorMessage);
       });
   };
 
@@ -73,7 +76,7 @@ function OTPContent() {
             id=""
             required
             readOnly
-            error="error"
+            error=""
           />
 
           <div className="space-y-3 flex flex-col">

@@ -13,13 +13,16 @@ export const POST = async (req: NextRequest) => {
   const body = await req.json();
   if (!body.email) {
     return NextResponse.json(
-      { message: "Email is Required " },
+      { message: "Имэйл шаардлагатай! " },
       { status: 400 },
     );
   }
   const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
   if (!regex.test(body.email)) {
-    return NextResponse.json({ message: "Invalid email" }, { status: 400 });
+    return NextResponse.json(
+      { message: "Буруу Имэйл оруулсан байна!" },
+      { status: 400 },
+    );
   }
 
   let user = await prisma.user.findUnique({ where: { email: body.email } });
@@ -48,5 +51,5 @@ export const POST = async (req: NextRequest) => {
     subject: "Таны нэг удаагын нэвртэх код",
     html: `<p>Код: <strong>${otp}</strong>!</p>`,
   });
-  return NextResponse.json({ message: "Success! Check your email" });
+  return NextResponse.json({ message: "Имэйл амжилттай илгээгдлээ!" });
 };

@@ -8,7 +8,10 @@ export const GET = async (req: NextRequest) => {
   const [_, token] = authorization.split(" ");
   try {
     const payload = jwt.verify(token, "nuutsOTP");
-    return NextResponse.json({ message: "success", user: payload });
+    return NextResponse.json({
+      message: "Та амжилттай нэвтэрлээ!",
+      user: payload,
+    });
   } catch {
     return NextResponse.json({ message: "Token expired" }, { status: 401 });
   }

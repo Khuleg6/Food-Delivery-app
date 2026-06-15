@@ -7,6 +7,7 @@ import { UserProvider } from "./user-provider";
 import { cn } from "@/lib/utils";
 import { CartProvider } from "@/context/CartContext";
 import { CartPopup } from "./component/cart-popup";
+import { Toaster } from "sonner";
 
 const geist = Geist({ subsets: ["latin"], variable: "--font-sans" });
 
@@ -31,6 +32,7 @@ export default function RootLayout({
           {children}
           <CartPopup />
         </CartProvider>
+        <Toaster position="top-center" richColors />
       </body>
     </html>
   );

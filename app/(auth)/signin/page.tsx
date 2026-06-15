@@ -4,6 +4,7 @@ import { useState } from "react";
 import { SubmitButton, TextField } from "../../component/textfield";
 import axios from "axios";
 import { useRouter, useSearchParams } from "next/navigation";
+import { toast } from "sonner";
 
 export default function Home() {
   const [email, setEmail] = useState("");
@@ -17,11 +18,13 @@ export default function Home() {
       .post("/api/auth", { email })
       .then((res) => {
         setLoading(false);
-        alert(res.data.message);
+        toast.success(res.data.message);
         router.push(`/signin/otp?email=${email}`);
       })
-      .catch(({ response }) => {
-        alert(response.message);
+      .catch((err) => {
+        setLoading(false);
+        const errorMessage = err.response?.data?.message;
+        toast.error(errorMessage);
       });
   };
   return (
@@ -59,7 +62,11 @@ export default function Home() {
             Log in to enjoy your favorite dishes.
           </p>
         </div>
-        <form className="flex flex-col gap-4" onSubmit={handleSubmitForm}>
+        <form
+          className="flex flex-col gap-4"
+          onSubmit={handleSubmitForm}
+          noValidate
+        >
           <TextField
             name="email"
             placeholder="Enter your email address"
