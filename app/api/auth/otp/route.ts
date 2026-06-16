@@ -49,5 +49,5 @@ export const POST = async (req: NextRequest) => {
   }
   const accessToken = jwt.sign(user, "nuutsOTP", { expiresIn: "1h" });
 
-  return NextResponse.json({ message: "Амжилттай!", accessToken });
+  return NextResponse.json({ message: "Амжилттай нэвтэрлээ!", accessToken });
 };

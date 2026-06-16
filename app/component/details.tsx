@@ -1,6 +1,7 @@
 import { useCart } from "@/context/CartContext";
 import { Food } from "@/src/generated/prisma/client";
 import { useEffect, useState } from "react";
+import { toast } from "sonner";
 
 interface FoodDetailsProps {
   food: Food | null;
@@ -16,6 +17,7 @@ export const FoodDetails = ({ food, onClose }: FoodDetailsProps) => {
   const handleAddCartClick = () => {
     for (let i = 0; i < quantity; i++) {
       addToCart(food);
+      toast("Food is being added to the cart!");
     }
     onClose();
   };
@@ -45,7 +47,7 @@ export const FoodDetails = ({ food, onClose }: FoodDetailsProps) => {
           <div className="flex">
             <div className="flex flex-col space-x-30">
               <span className="">Total price</span>
-              <span>${(food.price * quantity).toFixed(2)}</span>
+              <span>₮{(food.price * quantity).toFixed(2)}</span>
             </div>
             <div className="flex gap-3 items-center">
               <button

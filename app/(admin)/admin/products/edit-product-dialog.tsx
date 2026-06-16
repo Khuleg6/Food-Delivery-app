@@ -28,6 +28,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { FoodCategoryWithFoods } from "./page";
 import { Food } from "@/src/generated/prisma/client";
 import { Trash } from "lucide-react";
+import { toast } from "sonner";
 
 export const FoodEditDialog = ({
   open,
@@ -63,45 +64,55 @@ export const FoodEditDialog = ({
     axios
       .delete("/api/foods", { data: { id } })
       .then(() => {
-        alert("Амжилттай устгагдлаа");
+        toast("Амжилттай устгагдлаа");
         onClose();
         window.location.reload();
       })
-      .catch(() => alert("Устгахад алдаа гарлаа."))
+      .catch(() => toast("Устгахад алдаа гарлаа."))
       .finally(() => setLoading(false));
   };
 
   const handleOnSubmit = () => {
     if (!food) return;
 
-    // Шаардлагатай талбарууд бөглөгдсөн эсэхийг шалгах validation
+    // 1. Шаардлагатай талбарууд бөглөгдсөн эсэхийг шалгах (Улаан алдаа)
     if (!foodName.trim() || !categoryId) {
-      alert("Хоолны нэр болон категорийг заавал сонгоно уу.");
+      toast.error("Дутуу талбар байна!", {
+        description: "Хоолны нэр болон категорийг заавал сонгоно уу.",
+      });
       return;
     }
 
     setLoading(true);
 
-    // 💡 ЧУХАЛ ЗАСВАР: Хэрэв чиний бэкэнд /api/foods дотор PUT хүсэлтийг авдаг бол
-    // ID-г нь body дотор ингээд дамжуулна. Бэкэнд нь [id]/route.ts бүтэцтэй бол
-    // хаягийг `/api/foods/${food.id}` хэвээр үлдээж болно.
     axios
       .put("/api/foods", {
-        id: food.id, // ID-г body дотор хамт шидлээ
+        id: food.id,
         foodName,
         image,
-        price: parseFloat(price.toString()) || 0, // 🌟 Тоо руу найдвартай хөрвүүлэв
+        price: parseFloat(price.toString()) || 0,
         ingredients,
         categoryId,
       })
-      .then(() => {
-        alert("Хоолны мэдээлэл шинэчлэгдлээ 🎉");
+      .then((res) => {
+        // 2. Амжилттай болбол Ногоон тост харуулна
+        // Бэкэндээс ирсэн гоё мессеж байвал түүнийг, байхгүй бол өөрийн текстийг харуулна
+        toast.success(res.data.message || "Хоолны мэдээлэл шинэчлэгдлээ 🎉");
+
         onClose();
+
+        // 💡 ЗӨВЛӨГӨӨ: window.location.reload() хийвэл тост харагдаж амжилгүй хуудас чинь шууд ачаалчихдаг.
+        // Хэрэв датагаа refresh хийх функц (жишээ нь refreshData()) байгаа бол түүнийг дуудсан нь илүү гоё урсгалтай харагдуулна.
         window.location.reload();
       })
       .catch((err) => {
         console.error("PUT Error:", err);
-        alert(err.response?.data?.error || "Засахад алдаа гарлаа");
+        // 3. Алдаа гарвал Улаан тост харуулна
+        const errorMessage =
+          err.response?.data?.error ||
+          err.response?.data?.message ||
+          "Засахад алдаа гарлаа";
+        toast.error(errorMessage);
       })
       .finally(() => setLoading(false));
   };

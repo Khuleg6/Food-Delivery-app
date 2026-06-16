@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useCart } from "@/context/CartContext";
 import { useUser } from "../user-provider";
+import { toast } from "sonner";
 
 export const CartPopup = () => {
   const {
@@ -41,7 +42,7 @@ export const CartPopup = () => {
           setLoadingOrders(false);
         })
         .catch((err) => {
-          console.error("Захиалга татахад алдаа:", err);
+          toast("Захиалга татахад алдаа:", err);
           setLoadingOrders(false);
         });
     }
@@ -51,8 +52,8 @@ export const CartPopup = () => {
 
   const handleCheckout = async () => {
     if (cartItems.length === 0) return;
-    if (!user) return alert("Захиалга хийхийн тулд нэвтэрнэ үү.");
-    if (!address.trim()) return alert("Хүргэлтийн хаягаа оруулна уу.");
+    if (!user) return toast("Захиалга хийхийн тулд нэвтэрнэ үү!.");
+    if (!address.trim()) return toast("Хүргэлтийн хаягаа оруулна уу!.");
     try {
       const response = await axios.post(
         "/api/orders",
@@ -68,12 +69,12 @@ export const CartPopup = () => {
       );
 
       if (response.status === 201) {
-        alert("Захиалга амжилттай баталгаажлаа! 🎉");
+        toast("Захиалга амжилттай баталгаажлаа! 🎉");
         clearCart();
         setActiveTab("order"); // 🌟 Захиалга амжилттай болмогц шууд Order тэб рүү шилжүүлнэ
       }
     } catch (error: any) {
-      alert(error.response?.data?.error || "Алдаа гарлаа.");
+      toast(error.response?.data?.error || "Алдаа гарлаа.");
     }
   };
 

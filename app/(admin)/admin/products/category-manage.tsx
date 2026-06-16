@@ -10,6 +10,7 @@ import { Input } from "@/components/ui/input";
 import axios from "axios";
 import { Plus, Pencil, Trash2, Check, X } from "lucide-react";
 import { useState } from "react";
+import { toast } from "sonner";
 
 type Category = {
   id: string;
@@ -39,12 +40,11 @@ export const CategoryManageDialog = ({
     axios
       .post("/api/foods/categories", { categoryName: newCatName })
       .then(() => {
-        alert("Категори амжилттай нэмэгдлээ! 🎉");
+        toast("Категори амжилттай нэмэгдлээ! 🎉");
         setNewCatName("");
         refreshData();
-        
       })
-      .catch(() => alert("Нэмэхэд алдаа гарлаа"))
+      .catch(() => toast("Нэмэхэд алдаа гарлаа"))
       .finally(() => setLoading(false));
   };
 
@@ -63,26 +63,46 @@ export const CategoryManageDialog = ({
       .then(() => {
         setEditingId(null);
         refreshData();
-       
       })
-      .catch(() => alert("Засахад алдаа гарлаа"))
+      .catch(() => toast("Засахад алдаа гарлаа"))
       .finally(() => setLoading(false));
   };
 
   // 4. УСТГАХ
   const handleDelete = (id: string) => {
-    if (!confirm("Энэ категорийг устгахдаа итгэлтэй байна уу?")) return;
-    setLoading(true);
-    axios
-      .delete("/api/foods/categories", { data: { id } })
-      .then(() => {
-        refreshData();
-        
-      })
-      .catch(() =>
-        alert("Устгахад алдаа гарлаа. Хоол холбоотой байж магадгүй."),
-      )
-      .finally(() => setLoading(false));
+    // 1. Уламжлалт confirm-ийн оронд Sonner-оор асууна
+    toast("Категори устгах", {
+      description: "Энэ категорийг устгахдаа итгэлтэй байна уу?",
+      action: {
+        label: "Тийм, устга",
+        onClick: () => {
+          // Хэрэглэгч зөвшөөрвөл устгах процесс эхэлнэ
+          setLoading(true);
+
+          axios
+            .delete("/api/foods/categories", { data: { id } })
+            .then(() => {
+              refreshData();
+              // 2. Амжилттай болбол тост харуулна
+              toast.success("Категори амжилттай устгагдлаа.");
+            })
+            .catch(() => {
+              // 3. Алдаа гарвал улаан тост харуулна
+              toast.error(
+                "Устгахад алдаа гарлаа. Хоол холбоотой байж магадгүй.",
+              );
+            })
+            .finally(() => setLoading(false));
+        },
+      },
+      cancel: {
+        label: "Үгүй",
+        onClick: () => {
+          // Цуцалбал юу ч хийхгүй, тост хаагдана
+          console.log("Устгах үйлдлийг цуцаллаа");
+        },
+      },
+    });
   };
 
   return (

@@ -25,6 +25,7 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { FoodCategoryWithFoods } from "./page";
+import { toast } from "sonner";
 
 export const FoodCreateDialog = ({
   open,
@@ -43,8 +44,11 @@ export const FoodCreateDialog = ({
   const [image, setImage] = useState("");
   const [loading, setLoading] = useState(false);
 
+  // ... таны компонент дотор
+
   const handleOnSubmit = () => {
     setLoading(true);
+
     axios
       .post("/api/foods", {
         foodName,
@@ -54,13 +58,29 @@ export const FoodCreateDialog = ({
         categoryId: foodCategoryId,
       })
       .then((res) => {
-        alert("Food added");
         setLoading(false);
+
+        // 1. Энгийн toast-ийг Ногоон (Success) болгов
+        toast.success(res.data.message || "Хоол амжилттай нэмэгдлээ 🍔");
+
         onClose();
-        window.location.reload();
+
+        // 💡 Тост уншигдаж амжилгүй хуудас reload хийгдэхээс сэргийлж 0.5 сек хүлээлгэнэ
+        setTimeout(() => {
+          window.location.reload();
+        }, 500);
       })
-      .catch(({ response }) => {
-        alert("Aldaa");
+      .catch((err) => {
+        setLoading(false); // Алдаа гарвал loading-оо хаахаа мартаж болохгүй
+
+        // 2. { response }-ийг засаж, бэкэндийн жинхэнэ алдааны текстийг уншина
+        const errorMessage =
+          err.response?.data?.error ||
+          err.response?.data?.message ||
+          "Хоол нэмэхэд алдаа гарлаа";
+
+        // 3. Улаан (Error) тост харуулна
+        toast.error(errorMessage);
       });
   };
   return (
